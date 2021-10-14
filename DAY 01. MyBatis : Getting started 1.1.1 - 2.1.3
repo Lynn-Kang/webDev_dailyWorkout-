@@ -1,0 +1,150 @@
+14/OCT/2021 
+DAY 01. MyBatis : Getting started 1.1.1 - 2.1.3
+
+1 Introduction
+
+1.1.1 What is MyBatis?
+- Support for custom SQL, stored procedures and advanced mappings. 
+-> SQL support, store procedures, mappings.
+	
+- Eliminates almost all of the JDBC code and manual setting of parameters and retrieval of results. 
+-> It's easier to use this then JDBC code. 
+	
+- Use simple XML or Annotations for configuration and map primitives, Map interfaces and Java POJOs (Plain Old Java Objects) 
+to database records. -> simple XML, Annotation (for map primitives, Map I/F and JAVA POJOs) to DB records.
+	
+1.1.2 Help make this documentation better…
+- If you find this documentation lacking in any way, or missing documentation for a feature 
+the best thing to do is learn about it and then write the documentation yourself!
+- Sources of this manual are available in xdoc format at project's Git.
+Fork the repository, update them and send a pull request.
+-> How to send your modifications as a pull request
+(referenced from : https://github.com/mybatis/mybatis-3/blob/a3ba975f1e7b4c5aa41b042f611393087b2c10e2/CONTRIBUTING.md#how-to-send-your-modifications-as-a-pull-request) 
+	
+The best way to submit a patch is to send a pull request.
+Here are the steps of a typical workflow.
+
+	[DONE] 1) Fork the repository on GitHub.
+	[DONE] 2) Clone your fork to your local machine.
+	[ ] 3) Create a topic branch with a descriptive name. 
+	-> Branches allow you to build new features or test out ideas without putting your main project at risk.
+	-> (referenced from: https://docs.github.com/en/github/collaborating-with-pull-requests/proposing-changes-to-your-work-with-pull-requests/creating-and-deleting-branches-within-your-repository) 
+	[ ] 4)Make changes with unit tests in the topic branch.
+	[ ] 5)Push commits to your fork on GitHub.
+	[ ] 6)Send a pull request.
+	
+	For steps 1 to 3, please read this "GitHub help" if you are not familiar with these operations.
+	Step 4 and 5 are basic "git" operations. Please see the "online documentation" for its usage.
+
+	For how to write a unit test, please see the "unit test" page.
+	
+2 Getting Started
+
+2.1.1 Installation
+- Include the mybatis-x.x.x.jar file in the classpath.
+- If you are using Maven just add the following dependency to your pom.xml:
+
+<dependency>
+	<groupId>org.mybatis</groupId>
+	<artifactId>mybatis</artifactId>
+	<version>x.x.x</version>
+</dependency>
+
+2.1.2 Building SqlSessionFactory from XML
+
+- Every MyBatis application centers around an instance of SqlSessionFactory. 
+-> A SqlSessionFactory instance : acquired by using the SqlSessionFactoryBuilder. 
+	
+- SqlSessionFactoryBuilder can build a SqlSessionFactory instance from an XML configuration file, or from a custom prepared 
+instance of the Configuration class.
+	
+- Building a SqlSessionFactory instance from an XML file is very simple. 
+- It is recommended that you use a classpath resource for this configuration, but you could use any InputStream instance, including
+one created from a literal file path or a file:// URL. 
+-> Q. I wanna figure out what this explanation means.
+	
+- MyBatis includes a utility class, called Resources, that contains a number of methods 
+that make it simpler to load resources from the classpath and other locations.
+-> Resources (utility class) contains number of methods, func is to load resources.
+	
+	String resource = "org/mybatis/example/mybatis-config.xml";
+	InputStream inputStream = Resources.getResourceAsStream(resource);
+	SqlSessionFactory sqlSessionFactory = new SqlSessionFactoryBuilder().build(inputStream);
+	
+- The configuration XML file contains settings for the core of the MyBatis system, including a
+DataSource for acquiring database Connection instances, as well as a TransactionManager for determining 
+how transactions should be scoped and controlled. 
+-> Inside of xml file above (resource) : settings for the core of MyBatis (DataSource, TransactionManager)
+
+- The full details of the XML configuration file can be found later in this document, but here is a simple example:
+
+	<?xml version="1.0" encoding="UTF-8" ?>
+	<!DOCTYPE configuration
+	 PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+	 "http://mybatis.org/dtd/mybatis-3-config.dtd">
+	<configuration>
+		 <environments default="development">
+			 <environment id="development">
+			 	<transactionManager type="JDBC"/>
+			 	<dataSource type="POOLED">
+					 <property name="driver" value="${driver}"/>
+					 <property name="url" value="${url}"/>
+					 <property name="username" value="${username}"/>
+					 <property name="password" value="${password}"/>
+		 		</dataSource>
+		 	</environment>
+		 </environments>
+		 <mappers>
+		 	<mapper resource="org/mybatis/example/BlogMapper.xml"/>
+		 </mappers>
+	</configuration>
+	
+- While there is a lot more to the XML configuration file, the above example points out the most critical parts. 
+- Notice the XML header, required to validate the XML document. 
+	<?xml version="1.0" encoding="UTF-8" ?>
+		<!DOCTYPE configuration
+		 PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+		 "http://mybatis.org/dtd/mybatis-3-config.dtd">
+- The body of the environment element contains the environment configuration for transaction management and connection pooling.
+-> Q. What is transactions and pooling ? and what is the relationship between transaction and JDBC?  
+	<environments default="development">
+				 <environment id="development">
+					<transactionManager type="JDBC"/>
+					<dataSource type="POOLED">
+						 <property name="driver" value="${driver}"/>
+						 <property name="url" value="${url}"/>
+						 <property name="username" value="${username}"/>
+						 <property name="password" value="${password}"/>
+					</dataSource>
+				</environment>
+			 </environments>
+- The mappers element contains a list of mappers – the XML files and/or annotated Java interface classes 
+that contain the SQL code and mapping definitions.
+	<mappers>
+		 	<mapper resource="org/mybatis/example/BlogMapper.xml"/>
+		 </mappers>
+
+2.1.3 Building SqlSessionFactory without XML
+- If you prefer to directly build the configuration from Java, rather than XML, or create your own configuration builder, 
+MyBatis provides a complete Configuration class that provides all of the same configuration options as the XML file.
+
+	DataSource dataSource = BlogDataSourceFactory.getBlogDataSource();
+	TransactionFactory transactionFactory =
+	 new JdbcTransactionFactory();
+	Environment environment =
+	 new Environment("development", transactionFactory, dataSource);
+	Configuration configuration = new Configuration(environment);
+	configuration.addMapper(BlogMapper.class);
+	SqlSessionFactory sqlSessionFactory =
+	 new SqlSessionFactoryBuilder().build(configuration);
+	 
+- Notice in this case the configuration is adding a mapper class. Mapper classes are Java classes that
+contain SQL Mapping Annotations that avoid the need for XML. However, due to some limitations of
+Java Annotations and the complexity of some MyBatis mappings, XML mapping is still required for
+the most advanced mappings (e.g. Nested Join Mapping). 
+For this reason, MyBatis will automatically look for and load a peer XML file if it exists 
+(in this case, BlogMapper.xml would be loaded based on the classpath and name of BlogMapper.class). 
+More on this later.
+
+-> Another way to create SqlSessionFactoryBuilder instead of XML file. 
+-> But!! XML file is preferred, especially advanced mappings. 
