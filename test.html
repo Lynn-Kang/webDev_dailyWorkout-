@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>TEST JAVASCRIPT IN HTML</title>
+<style>
+h1 {
+	font-family: "Arial";
+	color: #3cb371;
+}
+
+#info {
+	color: blue;
+	font-family: "Arial";
+}
+</style>
+<!-- css 외부설정 <link rel="stylesheet" href="../css/testStyle.css"> -->
+<!-- js 외부설정 <script src="../js/testJavascript.js"></script> -->
+</head>
+<body>
+	<h1 id="title">JavaScript</h1>
+
+	<button id="button">Check the data</button>
+
+	<p id="msg"></p>
+	<p id="info">INFORMATION BELOW ▼</p>
+	<p id="line"></p>
+	<p id="line2"></p>
+	<p id="line3"></p>
+	<p id="line4"></p>
+	<hr>
+	<p id="line5"></p>
+	<p id="line6"></p>
+	<p id="line7"></p>
+	<p id="line8"></p>
+	<hr>
+	<p id="line9"></p>
+	<p id="line10"></p>
+	<p id="line11"></p>
+	<p id="line12"></p>
+	
+
+
+	<script>
+	
+		const peopleInDanger = {
+				
+			name : [ "John Due", "Alice Hue", "Mariana Pee" ],
+			age : [ 47, 57, 29 ],
+			address : [ "Misisippi River, USA", "NewYorkCity, USA", "LA, USA" ],
+			cel : [ "1-486-5975321", "1-486-5975322", "1-486-5975323" ],
+
+		}
+		
+		document.getElementById('button').onclick = style;
+		document.getElementById('button').onclick = showList;
+
+		function style() {
+			
+			document.getElementById('msg').textContent = "SOS";
+			document.getElementById('msg').style.fontSize = "24px";
+			document.getElementById('msg').style.color = "red";
+			document.getElementById('msg').style.backgroundColor = "yellow";
+		}
+		
+		function showList() {
+			
+			document.getElementById('line').innerHTML = peopleInDanger.name[0] + "<br>";
+			document.getElementById('line2').innerHTML = peopleInDanger.age[0] + "<br>";
+			document.getElementById('line3').innerHTML = peopleInDanger.address[0] + "<br>";
+			document.getElementById('line4').innerHTML = peopleInDanger.cel[0] + "<br>";
+			document.getElementById('line5').innerHTML = peopleInDanger.name[1] + "<br>";
+			document.getElementById('line6').innerHTML = peopleInDanger.age[1] + "<br>";
+			document.getElementById('line7').innerHTML = peopleInDanger.address[1] + "<br>";
+			document.getElementById('line8').innerHTML = peopleInDanger.cel[1] + "<br>";
+			document.getElementById('line9').innerHTML = peopleInDanger.name[2] + "<br>";
+			document.getElementById('line10').innerHTML = peopleInDanger.age[2] + "<br>";
+			document.getElementById('line11').innerHTML = peopleInDanger.address[2] + "<br>";
+			document.getElementById('line12').innerHTML = peopleInDanger.cel[2] + "<br>";
+		}
+		
+		/* MODIFYING DOM WITH JS*/
+		console.dir(document);
+		//console.dir(title);
+
+		/* EVENT & EVENT-HANDLER */
+		const title = document.querySelector("#title");
+
+		function handleResize(event) {
+			console.log(event);
+			//console.log("I've been resized")
+		}
+
+		//window.addEventListener("resize", handleResize());// funcName() : Immediate call
+		window.addEventListener("resize", handleResize);
+		//window.addEventListener("resize", handleResize);// funcName : Call when you need
+
+		function handleClick() {
+			title.style.color = "brown";
+		}
+
+		title.addEventListener("click", handleClick);
+	</script>
+</body>
+</html>
