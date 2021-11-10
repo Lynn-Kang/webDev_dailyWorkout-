@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Practice JavaScript Here</title>
+<link rel="stylesheet" href="../css/test2.css">
+</head>
+<body>
+
+	<h1 id="title"></h1>
+	<p id="empty"></p>
+	<p id="event"></p>
+	<p id="string"></p>
+	<p id="string2"></p>
+	<p id="number" onclick="calculate()">Click (number arithmetic)</p>
+	<p id="numberVsObj" onclick="numberVsObj()">number vs. object</p>
+	<p id="arrayVsObj" onclick="arrayVsObj()">Array vs. object</p>
+	<p id="arrayForLoop" onclick="arrayForLoop()">for-loop for Array</p>
+	<p id="arrayForEachLoop" onclick="arrayForEachLoop()">forEach-loop for Array</p>
+	<p id="arrayVsObj2" onclick="arrayVsObj2()">Array vs. object(2)</p>
+	
+	<!-- < element event = 'some JavaScript'> -->
+	<button onclick="document.getElementById('empty').innerHTML = Date()">The
+		time is?</button>
+	<button onclick="displayDate()">The time is? (2)</button>
+	<button onclick="this.innerHTML = Date()">The time is? (3)</button>
+	<script src="../js/test2.js"></script>
+
+</body>
+</html>
