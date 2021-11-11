@@ -1,0 +1,8 @@
+@charset "UTF-8";
+#upperBorder, #cafeMenuBoard, #lowerBorder {
+	font-weight:bold;
+	color: MediumSeaGreen;		
+} 
+#p01 {
+	color:brown;
+}
